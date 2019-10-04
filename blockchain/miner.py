@@ -9,6 +9,8 @@ from timeit import default_timer as timer
 
 import random
 
+import json
+
 
 def proof_of_work(last_proof):
     """
@@ -23,9 +25,13 @@ def proof_of_work(last_proof):
 
     start = timer()
 
+    last_p = f'{last_proof}'.encode()
+    last_p_hash = hashlib.sha256(last_p).hexdigest()
+
     print("Searching for next proof")
-    proof = 0
-    #  TODO: Your code here
+    proof = 9999999
+    while valid_proof(last_p_hash, proof) is False:
+        proof += 7
 
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
@@ -39,8 +45,10 @@ def valid_proof(last_hash, proof):
     IE:  last_hash: ...AE9123456, new hash 123456888...
     """
 
-    # TODO: Your code here!
-    pass
+    guess = f'{proof}'.encode()
+    guess_hash = hashlib.sha256(guess).hexdigest()
+
+    return last_hash[-6:] == guess_hash[:6]
 
 
 if __name__ == '__main__':
